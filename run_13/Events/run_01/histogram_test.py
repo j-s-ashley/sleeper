@@ -14,22 +14,22 @@ neg_particle_pts = []
 neg_particle_etas = []
 neg_particle_phis = []
 
-def eVtoGeV(eV):				# Pretty sure I'm getting pT values in eV,
-	return eV * 10**-9			# so I'm converting those values to GeV
+def mev_to_gev(mev):				# Appears that I'm getting pT values in MeV,
+	return mev * 10**-3			# so I'm converting those values to GeV
 
 num_particles = 0
 
 for particle in event.particles:
 	num_particles += 1
 	if particle.pid == 2000013:
-		p_pt = eVtoGeV( particle.momentum.pt() )
+		p_pt = mev_to_gev( particle.momentum.pt() )
 		pos_particle_pts.append(p_pt)
 		p_eta = particle.momentum.eta()
 		pos_particle_etas.append(p_eta)
 		p_phi = particle.momentum.phi()
 		pos_particle_phis.append(p_phi)
 	elif particle.pid == -2000013:
-		n_pt = eVtoGeV( particle.momentum.pt() )
+		n_pt = mev_to_gev( particle.momentum.pt() )
 		neg_particle_pts.append(n_pt)
 		n_eta = particle.momentum.eta()
 		neg_particle_etas.append(n_eta)
@@ -56,6 +56,52 @@ plt.title('Smuon pT')
 
 plt.savefig('Smuon_pT.pdf', bbox_inches='tight')
 plt.savefig('Smuon_pT.png', bbox_inches='tight')
+
+plt.grid()
+plt.show()
+
+
+# --- pT2 ---
+# Attempting to calculate pT separately.
+
+def xy_to_pt(px, py):
+	return np.sqrt( (px * px) + (py * py) )
+
+pos_px = []
+pos_py = []
+
+neg_px = []
+neg_py = []
+
+for particle in event.particles:
+	if particle.pid == 2000013:
+		p_px = particle.momentum.px
+		pos_px.append(p_px)
+		p_py = particle.momentum.py
+		pos_py.append(p_py)
+	elif particle.pid == -2000013:
+		n_px = particle.momentum.px
+		neg_px.append(n_px)
+		n_py = particle.momentum.py
+		neg_py.append(n_py)
+
+pos_pt2 = []
+neg_pt2 = []
+
+for i, smuon in enumerate(pos_px):
+	pos_pt2.append( mev_to_gev( xy_to_pt(pos_px[i], pos_py[i]) ) )
+	neg_pt2.append( mev_to_gev( xy_to_pt(neg_px[i], pos_px[i]) ) )
+
+plt.hist(pos_pt2, num_bins, histtype='step', label='Positively charged smuons')
+plt.hist(neg_pt2, num_bins, histtype='step', label='Negatively charged smuons')
+
+plt.xlabel('pT [GeV]')
+plt.ylabel('Number of Smuons')
+plt.legend()
+plt.title('Calculated Smuon pT')
+
+plt.savefig('Calc_Smuon_pT.pdf', bbox_inches='tight')
+plt.savefig('Calc_Smuon_pT.png', bbox_inches='tight')
 
 plt.grid()
 plt.show()
