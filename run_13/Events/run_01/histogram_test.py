@@ -14,8 +14,8 @@ neg_particle_pts = []
 neg_particle_etas = []
 neg_particle_phis = []
 
-def mev_to_gev(mev):				# Appears that I'm getting pT values in MeV,
-	return mev * 10**-3			# so I'm converting those values to GeV
+def mev_to_gev(mev):				# pT values are in MeV,
+	return mev * 10**-3			# converting to GeV
 
 num_particles = 0
 
@@ -42,20 +42,22 @@ def sturges(obs):
 	val = 1 + ( 3.322 * np.log10(obs) )
 	return int( round(val) )
 
-num_bins = sturges(num_particles / 2)
+# num_bins = sturges(num_particles / 2)
 
+range_min = 0
+range_max = 10**6
 
 # --- pT ---
-plt.hist(pos_particle_pts, num_bins, histtype='step', label='Positively charged smuons')
-plt.hist(neg_particle_pts, num_bins, histtype='step', label='Negatively charged smuons')
+plt.hist(pos_particle_pts, range=(range_min, range_max), histtype='step', label='Positively charged smuons')
+plt.hist(neg_particle_pts, range=(range_min, range_max), histtype='step', label='Negatively charged smuons')
 
 plt.xlabel('pT [GeV]')
 plt.ylabel('Number of Smuons')
 plt.legend()
 plt.title('Smuon pT')
 
-plt.savefig('Smuon_pT.pdf', bbox_inches='tight')
-plt.savefig('Smuon_pT.png', bbox_inches='tight')
+plt.savefig('Smuon_pT_v2.0.pdf', bbox_inches='tight')
+plt.savefig('Smuon_pT_v2.0.png', bbox_inches='tight')
 
 plt.grid()
 plt.show()
@@ -64,76 +66,76 @@ plt.show()
 # --- pT2 ---
 # Attempting to calculate pT separately.
 
-def xy_to_pt(px, py):
-	return np.sqrt( (px * px) + (py * py) )
+# def xy_to_pt(px, py):
+# 	return np.sqrt( (px * px) + (py * py) )
 
-pos_px = []
-pos_py = []
+# pos_px = []
+# pos_py = []
 
-neg_px = []
-neg_py = []
+# neg_px = []
+# neg_py = []
 
-for particle in event.particles:
-	if particle.pid == 2000013:
-		p_px = particle.momentum.px
-		pos_px.append(p_px)
-		p_py = particle.momentum.py
-		pos_py.append(p_py)
-	elif particle.pid == -2000013:
-		n_px = particle.momentum.px
-		neg_px.append(n_px)
-		n_py = particle.momentum.py
-		neg_py.append(n_py)
+# for particle in event.particles:
+#	if particle.pid == 2000013:
+#		p_px = particle.momentum.px
+#		pos_px.append(p_px)
+#		p_py = particle.momentum.py
+#		pos_py.append(p_py)
+#	elif particle.pid == -2000013:
+#		n_px = particle.momentum.px
+#		neg_px.append(n_px)
+#		n_py = particle.momentum.py
+#		neg_py.append(n_py)
 
-pos_pt2 = []
-neg_pt2 = []
+#pos_pt2 = []
+#neg_pt2 = []
 
-for i, smuon in enumerate(pos_px):
-	pos_pt2.append( mev_to_gev( xy_to_pt(pos_px[i], pos_py[i]) ) )
-	neg_pt2.append( mev_to_gev( xy_to_pt(neg_px[i], pos_px[i]) ) )
+#for i, smuon in enumerate(pos_px):
+#	pos_pt2.append( mev_to_gev( xy_to_pt(pos_px[i], pos_py[i]) ) )
+#	#neg_pt2.append( mev_to_gev( xy_to_pt(neg_px[i], pos_px[i]) ) )
 
-plt.hist(pos_pt2, num_bins, histtype='step', label='Positively charged smuons')
-plt.hist(neg_pt2, num_bins, histtype='step', label='Negatively charged smuons')
+#plt.hist(pos_pt2, range=(range_min, range_max), histtype='step', label='Positively charged smuons')
+#plt.hist(neg_pt2, range=(range_min, range_max), histtype='step', label='Negatively charged smuons')
 
-plt.xlabel('pT [GeV]')
-plt.ylabel('Number of Smuons')
-plt.legend()
-plt.title('Calculated Smuon pT')
+#plt.xlabel('pT [GeV]')
+#plt.ylabel('Number of Smuons')
+#plt.legend()
+#plt.title('Calculated Smuon pT')
 
-plt.savefig('Calc_Smuon_pT.pdf', bbox_inches='tight')
-plt.savefig('Calc_Smuon_pT.png', bbox_inches='tight')
+#plt.savefig('Calc_Smuon_pT_v2.0.pdf', bbox_inches='tight')
+#plt.savefig('Calc_Smuon_pT_v2.0.png', bbox_inches='tight')
 
-plt.grid()
-plt.show()
+#plt.grid()
+#plt.show()
 
 
 # --- eta ---
-plt.hist(pos_particle_etas, num_bins, histtype='step', label='Positively charged smuons')
-plt.hist(neg_particle_etas, num_bins, histtype='step', label='Negatively charged smuons')
+plt.hist(pos_particle_etas, range=(range_min, range_max), histtype='step', label='Positively charged smuons')
+plt.hist(neg_particle_etas, range=(range_min, range_max), histtype='step', label='Negatively charged smuons')
 
 plt.xlabel('$\eta$')
 plt.ylabel('Number of Smuons')
 plt.legend()
 plt.title('Smuon $\eta$')
 
-plt.savefig('Smuon_eta.pdf', bbox_inches='tight')
-plt.savefig('Smuon_eta.png', bbox_inches='tight')
+plt.savefig('Smuon_eta_v2.0.pdf', bbox_inches='tight')
+plt.savefig('Smuon_eta_v2.0.png', bbox_inches='tight')
 
 plt.grid()
 plt.show()
 
 
 # --- phi ---
-plt.hist(pos_particle_phis, num_bins, histtype='step', label='Positively charged smuons')
-plt.hist(neg_particle_phis, num_bins, histtype='step', label='Negatively charged smuons')
+plt.hist(pos_particle_phis, range=(range_min, range_max), histtype='step', label='Positively charged smuons')
+plt.hist(neg_particle_phis, range=(range_min, range_max), histtype='step', label='Negatively charged smuons')
 
 plt.xlabel('$\phi$')
 plt.ylabel('Number of Smuons')
 plt.legend()
 plt.title('Smuon $\phi$')
 
-plt.savefig('Smuon_phi.pdf', bbox_inches='tight')
-plt.savefig('Smuon_phi.png', bbox_inches='tight')
+plt.savefig('Smuon_phi_v2.0.pdf', bbox_inches='tight')
+plt.savefig('Smuon_phi_v2.0.png', bbox_inches='tight')
 
 plt.grid()
 plt.show()
